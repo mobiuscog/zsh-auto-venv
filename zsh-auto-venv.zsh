@@ -8,7 +8,8 @@ function _activate() {
 }
 
 function _deactivate() {
-    if [[ -n "$VIRTUAL_ENV" ]]; then
+    # Don't deactivate if it's also a Pyenv virtual environment (co-exist fix)
+    if [[ -n "$VIRTUAL_ENV" && -z "$PYENV_VIRTUAL_ENV" ]]; then
         deactivate
     fi
 }
@@ -33,7 +34,7 @@ function _check_path()
 
 function _check_venv()
 {
-    local venv_path="$(_check_path "$PWD" "venv")"
+    local venv_path="$(_check_path "$PWD" ".venv")"
 
     if [[ -n "$venv_path" ]]; then
         _activate "$venv_path"
